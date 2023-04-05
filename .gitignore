@@ -1,0 +1,9 @@
+# config file
+config.json
+
+# py
+__pycache__
+.mypy_cache
+
+# editor
+.vscode

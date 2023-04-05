@@ -1,0 +1,7 @@
+{
+    "ta_video_path": "/media/docker/volume/tubearchivist/youtube",
+    "ta_url": "http://tubearchivist.local",
+    "ta_token": "xxxxxxxxxxxxxxxx",
+    "jf_url": "http://jellyfin.local:8096",
+    "jf_token": "yyyyyyyyyyyyyyyy"
+}
