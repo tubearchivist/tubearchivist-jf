@@ -1,9 +1,9 @@
 """application entry point"""
 
-from src.connect import Jellyfin, TubeArchivist, folder_check
+from src.connect import Jellyfin, TubeArchivist, env_check
 from src.series import Library
 
-folder_check()
+env_check()
 Jellyfin().ping()
 TubeArchivist().ping()
 

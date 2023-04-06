@@ -3,33 +3,34 @@
 from datetime import datetime
 
 from src.connect import Jellyfin, TubeArchivist
+from src.static_types import TAVideo
 
 
 class Episode:
     """interact with an single episode"""
 
-    def __init__(self, youtube_id, jf_id):
-        self.youtube_id = youtube_id
-        self.jf_id = jf_id
+    def __init__(self, youtube_id: str, jf_id: str):
+        self.youtube_id: str = youtube_id
+        self.jf_id: str = jf_id
 
-    def sync(self):
+    def sync(self) -> None:
         """sync episode metadata"""
-        ta_video = self.get_ta_video()
+        ta_video: TAVideo = self.get_ta_video()
         self.update_metadata(ta_video)
         self.update_artwork(ta_video)
 
-    def get_ta_video(self):
+    def get_ta_video(self) -> TAVideo:
         """get video metadata from ta"""
-        path = f"/video/{self.youtube_id}"
-        ta_video = TubeArchivist().get(path)
+        path: str = f"/video/{self.youtube_id}"
+        ta_video: TAVideo = TubeArchivist().get(path)
 
         return ta_video
 
-    def update_metadata(self, ta_video):
+    def update_metadata(self, ta_video: TAVideo) -> None:
         """update jellyfin metadata from item_id"""
-        published = ta_video.get("published")
-        published_date = datetime.strptime(published, "%d %b, %Y")
-        data = {
+        published: str = ta_video["published"]
+        published_date: datetime = datetime.strptime(published, "%d %b, %Y")
+        data: dict = {
             "Id": self.jf_id,
             "Name": ta_video.get("title"),
             "Genres": [],
@@ -40,19 +41,24 @@ class Episode:
             "PremiereDate": published_date.isoformat(),
             "Overview": self._get_desc(ta_video),
         }
-        path = f"Items/{self.jf_id}"
+        path: str = f"Items/{self.jf_id}"
         Jellyfin().post(path, data)
 
-    def update_artwork(self, ta_video):
+    def update_artwork(self, ta_video: TAVideo) -> None:
         """update episode artwork in jf"""
-        thumb_base64 = TubeArchivist().get_thumb(ta_video.get("vid_thumb_url"))
-        path = f"Items/{self.jf_id}/Images/Primary"
+        thumb_path: str = ta_video["vid_thumb_url"]
+        thumb_base64: bytes = TubeArchivist().get_thumb(thumb_path)
+        path: str = f"Items/{self.jf_id}/Images/Primary"
         Jellyfin().post_img(path, thumb_base64)
 
-    def _get_desc(self, ta_video):
+    def _get_desc(self, ta_video: TAVideo) -> str | bool:
         """get description"""
-        raw_desc = ta_video.get("description").replace("\n", "<br>")
-        if len(raw_desc) > 500:
-            return raw_desc[:500] + " ..."
+        raw_desc: str = ta_video["description"]
+        if not raw_desc:
+            return False
 
-        return raw_desc
+        desc_clean: str = raw_desc.replace("\n", "<br>")
+        if len(raw_desc) > 500:
+            return desc_clean[:500] + " ..."
+
+        return desc_clean
