@@ -65,3 +65,36 @@ python main.py
 
 ## Install with Docker
 Coming soon...
+
+
+## Migration problems
+To import an existing Tube Archivist archive created with v0.3.4 or before, there are a few manual steps needed. These issues are fixed with videos and channels indexed with v0.3.5 and later.
+
+Apply these fixes *before* importing the archive.
+
+**Permissions**  
+Fix folder permissions not owned by the correct user. Navigate to the `ta_video_path` and run:
+
+```bash
+sudo chown -R $UID:$GID .
+```
+
+
+**Channel Art**  
+Tube Archivist v0.3.5 adds additional art work to the channel metadata. To trigger an automatic refresh of your old channels open a Python shell within the *tubearchivist* container:
+
+```bash
+docker exec -it tubearchivist python
+```
+
+Then execute these lines to trigger a background task for a full metadata refresh for all channels.
+
+```python
+from home.src.es.connect import IndexPaginate
+from home.tasks import check_reindex
+
+query = {"query": {"match_all": {}}}
+all_channels = IndexPaginate("ta_channel", query).get_results()
+reindex = {"channel": [i["channel_id"] for i in all_channels]}
+check_reindex.delay(data=reindex)
+```
