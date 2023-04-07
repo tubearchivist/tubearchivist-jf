@@ -45,6 +45,9 @@ jellyfin:
     - At first, this will add all channels as a Show with a single Season 1.
     - Then this script will populate the metadata.
 
+3. Backdrops
+    - In your Jellyfin installation under > *Settings* > *Display* > enable *Backdrops* for best channel art viewing experience.
+
 ## Install Standalone
 1. Install required libraries for your environment, e.g.
 ```bash
