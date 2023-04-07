@@ -38,7 +38,9 @@ class Library:
             show_handler.validate_episodes()
             show_handler.delete_folders(folders)
 
-        self.set_collection_art()
+        collection_id: str = self._get_collection()
+        self.set_collection_art(collection_id)
+        self.refresh_collection(collection_id)
 
     def _get_all_series(self) -> dict:
         """get all shows indexed in jf"""
@@ -47,17 +49,27 @@ class Library:
 
         return all_shows
 
-    def set_collection_art(self) -> None:
+    def _get_collection(self) -> str:
+        """get youtube collection id"""
+        folders: dict = Jellyfin().get("Library/MediaFolders")
+        for folder in folders["Items"]:
+            if folder.get("Name").lower() == "youtube":
+                return folder["Id"]
+
+        raise ValueError("youtube collection folder not found")
+
+    def set_collection_art(self, collection_id: str) -> None:
         """set collection ta art"""
         with open(self.COLLECTION_ART, "rb") as f:
             asset: bytes = f.read()
 
-        folders: dict = Jellyfin().get("Library/MediaFolders")
-        for folder in folders["Items"]:
-            if folder.get("Name").lower() == "youtube":
-                jf_id: str = folder.get("Id")
-                path: str = f"Items/{jf_id}/Images/Primary"
-                Jellyfin().post_img(path, base64.b64encode(asset))
+        path: str = f"Items/{collection_id}/Images/Primary"
+        Jellyfin().post_img(path, base64.b64encode(asset))
+
+    def refresh_collection(self, collection_id: str) -> None:
+        """trigger collection refresh"""
+        path: str = f"Items/{collection_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
+        Jellyfin().post(path, False)
 
 
 class Show:
