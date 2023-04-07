@@ -38,6 +38,7 @@ class JFShow(TypedDict):
 
     Id: str
     Path: str
+    Name: str
 
 
 class JFEpisode(TypedDict):
@@ -45,3 +46,4 @@ class JFEpisode(TypedDict):
 
     Id: str
     Path: str
+    Studios: list

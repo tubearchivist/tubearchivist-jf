@@ -78,13 +78,24 @@ class Show:
     def __init__(self, show: JFShow):
         self.show: JFShow = show
 
-    def _get_all_episodes(self) -> list[JFEpisode]:
+    def _get_all_episodes(
+        self,
+        filter_new: bool = False,
+        limit: int | bool = False,
+    ) -> list[JFEpisode]:
         """get all episodes of show"""
         series_id: str = self.show["Id"]
-        path: str = f"Shows/{series_id}/Episodes?fields=Path"
-        all_episodes = Jellyfin().get(path)
+        path: str = f"Shows/{series_id}/Episodes?fields=Path,Studios"
+        if limit:
+            path = f"{path}&limit={limit}"
 
-        return all_episodes["Items"]
+        all_episodes = Jellyfin().get(path)
+        all_items: list[JFEpisode] = all_episodes["Items"]
+
+        if filter_new:
+            all_items = [i for i in all_items if not i["Studios"]]
+
+        return all_items
 
     def _get_expected_seasons(self) -> set[str]:
         """get all expected seasons"""
@@ -149,7 +160,7 @@ class Show:
 
     def _get_ta_channel(self) -> TAChannel:
         """get ta channel metadata"""
-        episode: JFEpisode = self._get_all_episodes()[0]
+        episode: JFEpisode = self._get_all_episodes(limit=1)[0]
         youtube_id: str = os.path.split(episode["Path"])[-1][9:20]
         path = f"/video/{youtube_id}"
 
@@ -188,7 +199,13 @@ class Show:
 
     def validate_episodes(self) -> None:
         """sync all episodes"""
-        all_episodes: list[JFEpisode] = self._get_all_episodes()
-        for video in all_episodes:
+        showname: str = self.show["Name"]
+        new_episodes: list[JFEpisode] = self._get_all_episodes(filter_new=True)
+        if not new_episodes:
+            print(f"[show][{showname}] no new videos found")
+            return
+
+        print(f"[show][{showname}] found {len(new_episodes)} new videos")
+        for video in new_episodes:
             youtube_id: str = os.path.split(video["Path"])[-1][9:20]
             Episode(youtube_id, video["Id"]).sync()
