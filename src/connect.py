@@ -105,3 +105,13 @@ def env_check() -> None:
 
     if not os.path.exists(CONFIG["ta_video_path"]):
         raise FileNotFoundError("failed to access ta_video_path")
+
+
+def clean_overview(overview_raw: str) -> str:
+    """parse and clean raw overview text"""
+    if len(overview_raw) > 500:
+        overview_raw = overview_raw[:500] + " ..."
+
+    desc_clean: str = overview_raw.replace("\n", "<br>")
+
+    return desc_clean

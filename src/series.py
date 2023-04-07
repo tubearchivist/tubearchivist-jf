@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 from src.config import get_config
-from src.connect import Jellyfin, TubeArchivist
+from src.connect import Jellyfin, TubeArchivist, clean_overview
 from src.episode import Episode
 from src.static_types import JFEpisode, JFShow, TAChannel, TAVideo
 
@@ -172,15 +172,25 @@ class Show:
     def update_metadata(self, ta_channel: TAChannel) -> None:
         """update channel metadata"""
         path: str = "Items/" + self.show["Id"]
-        data = {
+        data: dict = {
             "Id": self.show["Id"],
             "Name": ta_channel["channel_name"],
-            "Overview": ta_channel["channel_description"],
+            "Overview": self._get_desc(ta_channel),
             "Genres": [],
             "Tags": [],
             "ProviderIds": {},
         }
         Jellyfin().post(path, data)
+
+    def _get_desc(self, ta_channel: TAChannel) -> str | bool:
+        """get parsed description"""
+        raw_desc: str = ta_channel["channel_description"]
+        if not raw_desc:
+            return False
+
+        desc_clean: str = clean_overview(raw_desc)
+
+        return desc_clean
 
     def update_artwork(self, ta_channel: TAChannel) -> None:
         """set channel artwork"""
@@ -205,7 +215,7 @@ class Show:
             print(f"[show][{showname}] no new videos found")
             return
 
-        print(f"[show][{showname}] found {len(new_episodes)} new videos")
+        print(f"[show][{showname}] indexing {len(new_episodes)} videos")
         for video in new_episodes:
             youtube_id: str = os.path.split(video["Path"])[-1][9:20]
             Episode(youtube_id, video["Id"]).sync()

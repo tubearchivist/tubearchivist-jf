@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from src.connect import Jellyfin, TubeArchivist
+from src.connect import Jellyfin, TubeArchivist, clean_overview
 from src.static_types import TAVideo
 
 
@@ -58,8 +58,5 @@ class Episode:
         if not raw_desc:
             return False
 
-        desc_clean: str = raw_desc.replace("\n", "<br>")
-        if len(raw_desc) > 500:
-            return desc_clean[:500] + " ..."
-
+        desc_clean: str = clean_overview(raw_desc)
         return desc_clean
