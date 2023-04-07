@@ -3,7 +3,7 @@ Import your Tube Archivist media folder into Jellyfin
 
 ![home screenshot](assets/screenshot-home.png?raw=true "Jellyfin Home")
 
-This is a proof of concept, expect bugs, for the time being, only use it for your testing environment, *not* for your main Jellyfin server. This requires Tube Archivist *unstable* builds for API compatibility.
+This is a proof of concept, looking for feedback. For the time being, only use it for your testing environment, *not* for your main Jellyfin server. This requires Tube Archivist *unstable* builds for API compatibility.
 
 ## Core functionality
 - Import each YouTube channel as a TV Show
@@ -11,7 +11,7 @@ This is a proof of concept, expect bugs, for the time being, only use it for you
 - Load artwork and additional metadata into Jellyfin
 
 ## How does that work?
-At the core, this links the two APIs together: This first queries the Jellyfin API for YouTube videos the goes to look up the required metadata in the Tube Archivist API. Then as a secondary step this will transfer the artwork as indexed from Tube Archivist.
+At the core, this links the two APIs together: This first queries the Jellyfin API for YouTube videos for any videos that don't have metadata to then populate the required fields from Tube Archivist. Then as a secondary step this will transfer the artwork.
 
 This doesn't depend on any additional Jellyfin plugins, that is a stand alone solution.
 
@@ -43,7 +43,7 @@ jellyfin:
 2. Let Jellyfin complete the library scan
     - This works best if Jellyfin has found all media files and Tube Archivist isn't currently downloading.
     - At first, this will add all channels as a Show with a single Season 1.
-    - Then this script will populate the metadata
+    - Then this script will populate the metadata.
 
 ## Install Standalone
 1. Install required libraries for your environment, e.g.
