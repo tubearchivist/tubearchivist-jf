@@ -3,7 +3,7 @@ Import your Tube Archivist media folder into Jellyfin
 
 ![home screenshot](assets/screenshot-home.png?raw=true "Jellyfin Home")
 
-This is a proof of concept, looking for feedback. For the time being, only use it for your testing environment, *not* for your main Jellyfin server. This requires Tube Archivist *unstable* builds for API compatibility.
+This is a proof of concept, looking for feedback. For the time being, only use it for your testing environment, *not* for your main Jellyfin server. This requires Tube Archivist v0.3.5 or later for API compatibility.
 
 ## Core functionality
 - Import each YouTube channel as a TV Show
