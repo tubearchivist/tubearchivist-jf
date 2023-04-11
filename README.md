@@ -15,6 +15,13 @@ At the core, this links the two APIs together: This first queries the Jellyfin A
 
 This doesn't depend on any additional Jellyfin plugins, that is a stand alone solution.
 
+This is a *one way* sync, syncing metadata from TA to Jellyfin. This syncs in particular:
+- Video title
+- Video description
+- Video date published
+- Channel name
+- Channel description
+
 ## Setup Jellyfin
 0. Add the Tube Archivist **/youtube** folder as a media folder for Jellyfin.
     - IMPORTANT: This needs to be mounted as **read only** aka `ro`, otherwise this will mess up Tube Archivist.
