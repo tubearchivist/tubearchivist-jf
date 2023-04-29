@@ -125,7 +125,8 @@ class Show:
         for year in all_expected:
             if year not in all_existing:
                 path: str = os.path.join(base, channel_name, year)
-                os.mkdir(path)
+                if not os.path.exists(path):
+                    os.mkdir(path)
                 folders.append(path)
 
         self._wait_for_seasons()
