@@ -1,0 +1,7 @@
+services:
+  ta-jf:
+    build: ./
+    volumes:
+      - ./config.json:/jellyfin/config.json:ro
+      - /tubearchivist/media:/tubearchivist/media
+    command: python main.py
