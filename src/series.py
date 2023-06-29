@@ -155,13 +155,18 @@ class Show:
 
     def validate_show(self) -> None:
         """set show metadata"""
-        ta_channel: TAChannel = self._get_ta_channel()
+        ta_channel: TAChannel | None = self._get_ta_channel()
+        if ta_channel is None:
+            return
         self.update_metadata(ta_channel)
         self.update_artwork(ta_channel)
 
-    def _get_ta_channel(self) -> TAChannel:
+    def _get_ta_channel(self) -> TAChannel | None:
         """get ta channel metadata"""
-        episode: JFEpisode = self._get_all_episodes(limit=1)[0]
+        episodes: list[JFEpisode] = self._get_all_episodes(limit=1)
+        if not episodes:
+            return
+        episode: JFEpisode = episodes[0]
         youtube_id: str = os.path.split(episode["Path"])[-1][9:20]
         path = f"/video/{youtube_id}"
 
