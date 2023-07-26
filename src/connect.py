@@ -100,11 +100,30 @@ class TubeArchivist:
 
 def env_check() -> None:
     """check if ta_video_path is accessible"""
-    if not os.path.exists("config.json"):
-        raise FileNotFoundError("config.json file not found")
+#    if not os.path.exists("config.json"):
+#        raise FileNotFoundError("config.json file not found")
+    if not CONFIG["ta_url"]:
+        raise ValueError("TA_URL not set")
+    else:
+        print("TA_URL =", CONFIG["ta_url"])
+
+    if not CONFIG["ta_token"]:
+        raise ValueError("TA_TOKEN not set")
+    else:
+        print("TA_TOKEN =", CONFIG["ta_token"])
+
+    if not CONFIG["jf_url"]:
+        raise ValueError("JF_URL not set")
+    else:
+        print("JF_URL =", CONFIG["jf_url"])
+
+    if not CONFIG["jf_token"]:
+        raise ValueError("JF_TOKEN not set")
+    else:
+        print("JF_TOKEN =", CONFIG["jf_token"])
 
     if not os.path.exists(CONFIG["ta_video_path"]):
-        raise FileNotFoundError("failed to access ta_video_path")
+        raise FileNotFoundError("failed to access ta_video_path", CONFIG["ta_video_path"])
 
 
 def clean_overview(overview_raw: str) -> str:

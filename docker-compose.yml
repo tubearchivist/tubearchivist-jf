@@ -1,0 +1,13 @@
+services:
+  ta-jf:
+    build: ./
+    environment:
+      - TA_VIDEO_PATH="/youtube"
+      - TA_URL="http://tubearchivist.local"
+      - TA_TOKEN="xxxxxxxxxxxxxxxx"
+      - JF_URL="http://jellyfin.local:8096"
+      - JF_TOKEN="yyyyyyyyyyyyyyyy"
+#    volumes:
+#      - ./config.json:/jellyfin/config.json:ro
+#      - /youtube:/youtube
+    command: python main.py
