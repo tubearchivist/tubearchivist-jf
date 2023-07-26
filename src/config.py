@@ -2,27 +2,43 @@
 
 import json
 import os
+from typing import Literal
 
 from src.static_types import ConfigType
 
 
 def get_config() -> ConfigType:
     """get connection config"""
-    
+    config_content: ConfigType | Literal[False] = (
+        get_config_file() or get_config_env()
+    )
+    if not config_content:
+        raise ValueError("No config.json or environment variable found")
+
+    return config_content
+
+
+def get_config_file() -> ConfigType | Literal[False]:
+    """read config file if available"""
     if os.path.exists("config.json"):
-        print("config.json file found, skipping environment variables")
         with open("config.json", "r", encoding="utf-8") as f:
             config_content: ConfigType = json.loads(f.read())
+
         return config_content
-    elif "TA_URL" in os.environ:
-        print("Environment variables found, continuing")
-        data = {}
-        data['ta_video_path'] = os.getenv('TA_VIDEO_PATH', '/youtube')
-        data['ta_url'] = os.getenv('TA_URL')
-        data['ta_token'] = os.getenv('TA_TOKEN')
-        data['jf_url'] = os.getenv('JF_URL')
-        data['jf_token'] = os.getenv('JF_TOKEN')
-        config_content: ConfigType = json.loads(json.dumps(data))
+
+    return False
+
+
+def get_config_env() -> ConfigType | Literal[False]:
+    """read config from environment"""
+    if "TA_URL" in os.environ:
+        config_content: ConfigType = {
+            "ta_video_path": "/youtube",
+            "ta_url": os.environ["TA_URL"],
+            "ta_token": os.environ["TA_TOKEN"],
+            "jf_url": os.environ["JF_URL"],
+            "jf_token": os.environ["JF_TOKEN"],
+        }
         return config_content
-    else:
-        raise ValueError("No config.json or environment variable found, exiting")
+
+    return False
