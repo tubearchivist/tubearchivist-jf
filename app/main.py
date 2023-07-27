@@ -3,13 +3,13 @@
 from src.connect import Jellyfin, TubeArchivist, env_check
 from src.series import Library
 
-env_check()
-Jellyfin().ping()
-TubeArchivist().ping()
-
 
 def main():
     """main thread"""
+    env_check()
+    Jellyfin().ping()
+    TubeArchivist().ping()
+
     library = Library()
     library.validate_series()
 

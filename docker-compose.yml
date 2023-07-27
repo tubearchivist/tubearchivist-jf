@@ -1,13 +1,23 @@
+version: '3.3'
+
 services:
-  ta-jf:
-    build: ./
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - 8096:8096
+    volumes:
+      - ./jellyfin/config:/config
+      - ./jellyfin/cache:/cache
+      - ./tubearchivist/youtube:/media/youtube:ro
+  tubearchivist-jf:
+    image: bbilly1/tubearchivist-jf
+    container_name: tubearchivist-jf
     environment:
-      - TA_VIDEO_PATH="/youtube"
-      - TA_URL="http://tubearchivist.local"
-      - TA_TOKEN="xxxxxxxxxxxxxxxx"
-      - JF_URL="http://jellyfin.local:8096"
-      - JF_TOKEN="yyyyyyyyyyyyyyyy"
-#    volumes:
-#      - ./config.json:/jellyfin/config.json:ro
-#      - /youtube:/youtube
-    command: python main.py
+      - TA_URL=http://tubearchivist:8000
+      - TA_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - JF_URL=http://jellyfin:8096
+      - JF_TOKEN=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+    volumes:
+      - ./tubearchivist/youtube:/youtube
