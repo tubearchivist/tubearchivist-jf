@@ -20,8 +20,8 @@ def get_config() -> ConfigType:
 
 def get_config_file() -> ConfigType | Literal[False]:
     """read config file if available"""
-    if os.path.exists("config.json"):
-        with open("config.json", "r", encoding="utf-8") as f:
+    if os.path.exists("./config.json"):
+        with open("./config.json", "r", encoding="utf-8") as f:
             config_content: ConfigType = json.loads(f.read())
 
         return config_content

@@ -68,9 +68,9 @@ pip install -r requirements.txt
 	- `jf_url`: Full URL where Jellyfin is reachable
 	- `jf_token`: Jellyfin API token
 
-Then run the script with python, e.g.
+Then run the script from the main folder with python, e.g.
 ```python
-python main.py
+python app/main.py
 ```
 
 ## Install with Docker
