@@ -4,7 +4,6 @@ import base64
 import os
 
 import requests
-
 from src.config import get_config
 from src.static_types import ConfigType, TAVideo
 
