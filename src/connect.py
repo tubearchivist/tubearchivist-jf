@@ -9,6 +9,7 @@ from src.config import get_config
 from src.static_types import ConfigType, TAVideo
 
 CONFIG: ConfigType = get_config()
+EXPECTED_ENV = {"ta_url", "ta_token", "jf_url", "jf_token", "ta_video_path"}
 
 
 class Jellyfin:
@@ -99,31 +100,20 @@ class TubeArchivist:
 
 
 def env_check() -> None:
-    """check if ta_video_path is accessible"""
-#    if not os.path.exists("config.json"):
-#        raise FileNotFoundError("config.json file not found")
-    if not CONFIG["ta_url"]:
-        raise ValueError("TA_URL not set")
-    else:
-        print("TA_URL =", CONFIG["ta_url"])
+    """check for expected environment"""
 
-    if not CONFIG["ta_token"]:
-        raise ValueError("TA_TOKEN not set")
-    else:
-        print("TA_TOKEN =", CONFIG["ta_token"])
-
-    if not CONFIG["jf_url"]:
-        raise ValueError("JF_URL not set")
-    else:
-        print("JF_URL =", CONFIG["jf_url"])
-
-    if not CONFIG["jf_token"]:
-        raise ValueError("JF_TOKEN not set")
-    else:
-        print("JF_TOKEN =", CONFIG["jf_token"])
+    if not CONFIG:
+        raise ValueError("could not build config.")
 
     if not os.path.exists(CONFIG["ta_video_path"]):
-        raise FileNotFoundError("failed to access ta_video_path", CONFIG["ta_video_path"])
+        raise FileNotFoundError(
+            "failed to access ta_video_path", CONFIG["ta_video_path"]
+        )
+
+    if not set(CONFIG) == EXPECTED_ENV:
+        raise ValueError(
+            f"expected environment {EXPECTED_ENV} but got {set(CONFIG)}"
+        )
 
 
 def clean_overview(overview_raw: str) -> str:
