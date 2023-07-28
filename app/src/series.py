@@ -165,7 +165,7 @@ class Show:
         """get ta channel metadata"""
         episodes: list[JFEpisode] = self._get_all_episodes(limit=1)
         if not episodes:
-            return
+            return None
         episode: JFEpisode = episodes[0]
         youtube_id: str = os.path.split(episode["Path"])[-1][9:20]
         path = f"/video/{youtube_id}"
