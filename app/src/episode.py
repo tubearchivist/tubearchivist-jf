@@ -13,23 +13,20 @@ class Episode:
         self.youtube_id: str = youtube_id
         self.jf_id: str = jf_id
 
-    def sync(self) -> None:
+    def get_ta_video(self) -> TAVideo:
+        """get ta metadata"""
+        ta_video: TAVideo = TubeArchivist().get_video(self.youtube_id)
+        return ta_video
+
+    def sync(self, ta_video: TAVideo) -> None:
         """sync episode metadata"""
-        ta_video: TAVideo = self.get_ta_video()
         self.update_metadata(ta_video)
         self.update_artwork(ta_video)
-
-    def get_ta_video(self) -> TAVideo:
-        """get video metadata from ta"""
-        path: str = f"/video/{self.youtube_id}"
-        ta_video: TAVideo = TubeArchivist().get(path)
-
-        return ta_video
 
     def update_metadata(self, ta_video: TAVideo) -> None:
         """update jellyfin metadata from item_id"""
         published: str = ta_video["published"]
-        published_date: datetime = datetime.strptime(published, "%d %b, %Y")
+        published_date: datetime = datetime.fromisoformat(published)
         data: dict = {
             "Id": self.jf_id,
             "Name": ta_video.get("title"),

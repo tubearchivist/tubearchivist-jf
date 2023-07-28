@@ -5,7 +5,7 @@ import os
 
 import requests
 from src.config import get_config
-from src.static_types import ConfigType, TAVideo
+from src.static_types import ConfigType, TAChannel, TAVideo
 
 CONFIG: ConfigType = get_config()
 EXPECTED_ENV = {"ta_url", "ta_token", "jf_url", "jf_token", "ta_video_path"}
@@ -65,19 +65,27 @@ class TubeArchivist:
     headers: dict = {"Authorization": f"Token {ta_token}"}
     base: str = CONFIG["ta_url"]
 
-    def get(self, path: str) -> TAVideo:
-        """get document from ta"""
-        url: str = f"{self.base}/api/{path}"
+    def get_video(self, video_id: str) -> TAVideo:
+        """get video metadata"""
+        url: str = f"{self.base}/api/video/{video_id}/"
         response = requests.get(url, headers=self.headers, timeout=10)
 
         if response.ok:
-            response_json = response.json()
-            if "data" in response_json:
-                return response.json().get("data")
+            ta_video: TAVideo = response.json()["data"]
+            return ta_video
 
-            return response.json()
+        raise ValueError(f"video not found in TA: {url}")
 
-        raise ValueError(f"video not found in TA: {path}")
+    def get_channel(self, channel_id: str) -> TAChannel | None:
+        """get channel metadata"""
+        url: str = f"{self.base}/api/channel/{channel_id}/"
+        response = requests.get(url, headers=self.headers, timeout=10)
+        if response.ok:
+            ta_channel: TAChannel = response.json()["data"]
+            return ta_channel
+
+        print(f"channel not found in TA: {url}")
+        return None
 
     def get_thumb(self, path: str) -> bytes:
         """get encoded thumbnail from ta"""
@@ -91,7 +99,9 @@ class TubeArchivist:
 
     def ping(self) -> None:
         """ping tubearchivist server"""
-        response = self.get("ping/")
+        url: str = f"{self.base}/api/ping/"
+        response = requests.get(url, headers=self.headers, timeout=10)
+
         if not response:
             raise ConnectionError("failed to connect to tube archivist")
 
