@@ -30,6 +30,8 @@ class Library:
 
     def validate_series(self) -> None:
         """validate all series"""
+        collection_id: str = self._get_collection()
+        self.refresh_collection(collection_id)
         all_shows: list[JFShow] = self._get_all_series()["Items"]
         for show in all_shows:
             show_handler = Show(show)
@@ -38,7 +40,6 @@ class Library:
             if folders:
                 show_handler.delete_folders(folders)
 
-        collection_id: str = self._get_collection()
         self.set_collection_art(collection_id)
         self.refresh_collection(collection_id)
 
@@ -70,6 +71,18 @@ class Library:
         """trigger collection refresh"""
         path: str = f"Items/{collection_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
         Jellyfin().post(path, False)
+
+        for _ in range(12):
+            response = Jellyfin().get("Library/VirtualFolders")
+            for folder in response:
+                if not folder["ItemId"] == collection_id:
+                    continue
+
+                if folder["RefreshStatus"] == "Idle":
+                    return
+
+                print("waiting for library refresh")
+                sleep(5)
 
 
 class Show:
