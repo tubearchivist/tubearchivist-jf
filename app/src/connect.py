@@ -8,6 +8,7 @@ from src.config import get_config
 from src.static_types import ConfigType, TAChannel, TAVideo
 
 CONFIG: ConfigType = get_config()
+TIMEOUT = 60
 EXPECTED_ENV = {"ta_url", "ta_token", "jf_url", "jf_token", "ta_video_path"}
 
 
@@ -22,7 +23,7 @@ class Jellyfin:
     def get(self, path: str) -> dict:
         """make a get request"""
         url: str = f"{self.base}/{path}"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = requests.get(url, headers=self.headers, timeout=TIMEOUT)
         if response.ok:
             return response.json()
 
@@ -33,7 +34,7 @@ class Jellyfin:
         """make a post request"""
         url: str = f"{self.base}/{path}"
         response = requests.post(
-            url, headers=self.headers, json=data, timeout=10
+            url, headers=self.headers, json=data, timeout=TIMEOUT
         )
         if not response.ok:
             print(response.text)
@@ -44,7 +45,7 @@ class Jellyfin:
         new_headers: dict = self.headers.copy()
         new_headers.update({"Content-Type": "image/jpeg"})
         response = requests.post(
-            url, headers=new_headers, data=thumb_base64, timeout=10
+            url, headers=new_headers, data=thumb_base64, timeout=TIMEOUT
         )
         if not response.ok:
             print(response.text)
@@ -68,7 +69,7 @@ class TubeArchivist:
     def get_video(self, video_id: str) -> TAVideo:
         """get video metadata"""
         url: str = f"{self.base}/api/video/{video_id}/"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = requests.get(url, headers=self.headers, timeout=TIMEOUT)
 
         if response.ok:
             ta_video: TAVideo = response.json()["data"]
@@ -79,7 +80,7 @@ class TubeArchivist:
     def get_channel(self, channel_id: str) -> TAChannel | None:
         """get channel metadata"""
         url: str = f"{self.base}/api/channel/{channel_id}/"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = requests.get(url, headers=self.headers, timeout=TIMEOUT)
         if response.ok:
             ta_channel: TAChannel = response.json()["data"]
             return ta_channel
@@ -91,7 +92,7 @@ class TubeArchivist:
         """get encoded thumbnail from ta"""
         url: str = CONFIG["ta_url"] + path
         response = requests.get(
-            url, headers=self.headers, stream=True, timeout=10
+            url, headers=self.headers, stream=True, timeout=TIMEOUT
         )
         base64_thumb: bytes = base64.b64encode(response.content)
 
@@ -100,7 +101,7 @@ class TubeArchivist:
     def ping(self) -> None:
         """ping tubearchivist server"""
         url: str = f"{self.base}/api/ping/"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = requests.get(url, headers=self.headers, timeout=TIMEOUT)
 
         if not response:
             raise ConnectionError("failed to connect to tube archivist")
