@@ -90,7 +90,7 @@ python app/main.py
 ```
 
 ## Migration problems
-Due to the filesystem change between Tube Archivist v0.3.6 to v0.4.0, this will reset your YouTube videos in Jellyfin and will add them as new again. Unfortunatly there is no migration path.
+Due to the filesystem change between Tube Archivist v0.3.6 to v0.4.0, this will reset your YouTube videos in Jellyfin and will add them as new again. Unfortunately there is no migration path.
 
 To import an existing Tube Archivist archive created with v0.3.4 or before, there are a few manual steps needed. These issues are fixed with videos and channels indexed with v0.3.5 and later.
 
