@@ -3,7 +3,9 @@ Import your Tube Archivist media folder into Jellyfin
 
 ![home screenshot](assets/screenshot-home.png?raw=true "Jellyfin Home")
 
-This is a proof of concept, looking for feedback. For the time being, only use it for your testing environment, *not* for your main Jellyfin server. This requires Tube Archivist v0.3.5 or later for API compatibility.
+This repo looks for regular contributors. If this is a useful integration, consider improving upon it.   
+
+This requires Tube Archivist v0.4.0 or later for API compatibility.
 
 ## Core functionality
 - Import each YouTube channel as a TV Show
@@ -23,21 +25,11 @@ This is a *one way* sync, syncing metadata from TA to Jellyfin. This syncs in pa
 - Channel description
 
 ## Setup Jellyfin
-0. Add the Tube Archivist **/youtube** folder as a media folder for Jellyfin.
-    - IMPORTANT: This needs to be mounted as **read only** aka `ro`, otherwise this will mess up Tube Archivist.
 
-Example Jellyfin setup:
-```yml
-jellyfin:
-  image: jellyfin/jellyfin
-  container_name: jellyfin
-  restart: unless-stopped
-  network_mode: host
-  volumes:
-    - ./volume/jellyfin/config:/config
-    - ./volume/jellyfin/cache:/cache
-    - ./volume/tubearchivist/youtube:/media/youtube:ro  # note :ro at the end
-```
+Take a look at the example docker-compose.yml provided.
+
+0. Add the Tube Archivist **/youtube** folder as a media folder for Jellyfin.
+    - IMPORTANT: This needs to be mounted as **read only** aka `ro`, otherwise this will mess up Tube Archivist.  
 
 1. Add a new media library to your Jellyfin server for your Tube Archivist videos, required options:
     - Content type: `Shows`
@@ -55,10 +47,34 @@ jellyfin:
 3. Backdrops
     - In your Jellyfin installation under > *Settings* > *Display* > enable *Backdrops* for best channel art viewing experience.
 
+## Install with Docker
+An example configuration is provided in the docker-compose.yml file. Configure these environment variables:
+  - `TA_URL`: Full URL where Tube Archivist is reachable
+  - `TA_TOKEN`: Tube Archivist API token, accessible from the settings page
+  - `JF_URL`: Full URL where Jellyfin is reachable
+  - `JF_TOKEN`: Jellyfin API token
+  - `LISTEN_PORT`: Optionally change the port where the integration is listening for messages. Defaults to `8001`. If you change this, make sure to also change the json link for auto trigger as described below.
+
+Mount the `/youtube` folder from Tube Archivist also in this container at `/youtube` to give this integration access to the media archive.
+
+### Manual trigger
+For an initial import or for other irregular occasions, trigger the library scan from outside the container, e.g.:
+```bash
+docker exec -it tubearchivist-jf python main.py
+```
+
+### Auto trigger
+Use the notification functionality of Tube Archivist to automatically trigger a library scan whenever the download task complets in Tube Archivist. For the `Start download` schedule on your settings page add a json Apprise link to send a push notification to the `tubearchivist-jf` container on task completion, make sure to specify the port, e.g.:
+
+```
+json://tubearchivist-jf:8001
+```
+
+
 ## Install Standalone
 1. Install required libraries for your environment, e.g.
 ```bash
-pip install -r requirements.txt
+pip install requests
 ```
 2. rename/copy *config.sample.json* to *config.json*.
 3. configure these keys:
@@ -73,11 +89,9 @@ Then run the script from the main folder with python, e.g.
 python app/main.py
 ```
 
-## Install with Docker
-Coming soon...
-
-
 ## Migration problems
+Due to the filesystem change between Tube Archivist v0.3.6 to v0.4.0, this will reset your YouTube videos in Jellyfin and will add them as new again. Unfortunatly there is no migration path.
+
 To import an existing Tube Archivist archive created with v0.3.4 or before, there are a few manual steps needed. These issues are fixed with videos and channels indexed with v0.3.5 and later.
 
 Apply these fixes *before* importing the archive.

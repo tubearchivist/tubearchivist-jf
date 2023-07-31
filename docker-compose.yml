@@ -10,7 +10,7 @@ services:
     volumes:
       - ./jellyfin/config:/config
       - ./jellyfin/cache:/cache
-      - ./tubearchivist/youtube:/media/youtube:ro
+      - ./tubearchivist/youtube:/media/youtube:ro  # note :ro at the end
   tubearchivist-jf:
     image: bbilly1/tubearchivist-jf
     container_name: tubearchivist-jf
@@ -20,4 +20,6 @@ services:
       - JF_URL=http://jellyfin:8096
       - JF_TOKEN=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
     volumes:
-      - ./tubearchivist/youtube:/youtube
+      - ./tubearchivist/youtube:/youtube  # matching youtube volume as in Tube Archivist
+    expose:
+      - "8001"
