@@ -1,4 +1,6 @@
 ## Tube Archivist Jellyfin Integration
+*Note: This repo was renamed from **tubearchivist/jellyfin** to **tubearchivist/tubearchivist-jf** to avoid confustion with the main Jellyfin repo.*  
+
 Import your Tube Archivist media folder into Jellyfin
 
 ![home screenshot](assets/screenshot-home.png?raw=true "Jellyfin Home")
