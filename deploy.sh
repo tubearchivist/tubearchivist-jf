@@ -51,7 +51,8 @@ function sync_test {
 
 }
 
-function sync_docker {
+# old local release build
+function sync_docker_old {
 
     # check things
     if [[ $(git branch --show-current) != 'master' ]]; then
@@ -86,6 +87,33 @@ function sync_docker {
     git push origin "$VERSION"
 
 }
+
+
+function sync_docker {
+
+    # check things
+    if [[ $(git branch --show-current) != 'master' ]]; then
+        echo 'you are not on master, dummy!'
+        return
+    fi
+
+    echo "latest tags:"
+    git tag | tail -n 5 | sort -r
+
+    printf "\ncreate new version:\n"
+    read -r VERSION
+
+    echo "push new tag: $VERSION?"
+    read -rn 1
+
+    # create release tag
+    echo "commits since last version:"
+    git log "$(git describe --tags --abbrev=0)"..HEAD --oneline
+    git tag -a "$VERSION" -m "new release version $VERSION"
+    git push origin "$VERSION"
+
+}
+
 
 if [[ $1 == "validate" ]]; then
     validate "$2"
