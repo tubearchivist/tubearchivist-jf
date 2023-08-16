@@ -91,6 +91,16 @@ Then run the script from the main folder with python, e.g.
 python app/main.py
 ```
 
+## Limitations
+Jellyfin needs to be able to see the temporary season folders created by this extensions. You will see messages like `waiting for seasons to be created` before you will run into a `TimeoutError`, if that doesn't happen in a reasonable time frame.
+
+Some ideas for why that is:
+- Your JF busy, too slow or is already refreshing another library and is not picking up the folder in time.
+- JF doesn't have the permissions to see the folder created by the extension.
+- You didn't mount the volumes as expected and JF is looking in the wrong place.
+
+You might have to cleanup any leftover year folders in the channel if you have reached a `TimeoutError` before you can run it again.
+
 ## Migration problems
 Due to the filesystem change between Tube Archivist v0.3.6 to v0.4.0, this will reset your YouTube videos in Jellyfin and will add them as new again. Unfortunately there is no migration path.
 
