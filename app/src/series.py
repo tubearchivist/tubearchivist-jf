@@ -186,7 +186,7 @@ class Show:
             return None
 
         base: str = get_config()["ta_video_path"]
-        channel_folder = os.path.split(os.path.split(jf_ep["Path"])[0])[-1]
+        channel_folder = os.path.split(os.path.split(jf_ep["Path"].replace("\\","/"))[0])[-1]
         season_folder = os.path.join(base, channel_folder, expected_season)
         os.makedirs(season_folder)
         self._wait_for_season(expected_season)
