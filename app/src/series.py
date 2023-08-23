@@ -101,7 +101,7 @@ class Show:
 
     def _get_ta_channel(self) -> TAChannel | None:
         """get ta channel metadata"""
-        channel_id: str = self.show["Path"].split("/")[-1]
+        channel_id: str = self.show["Path"].replace("\\","/").split("/")[-1]
         ta_channel: TAChannel | None = TubeArchivist().get_channel(channel_id)
 
         return ta_channel
@@ -155,7 +155,7 @@ class Show:
         print(f"[show][{showname}] indexing {len(new_episodes)} videos")
         seasons_created: list[str] = []
         for jf_ep in new_episodes:
-            youtube_id: str = os.path.basename(jf_ep["Path"]).split(".")[0]
+            youtube_id: str = os.path.basename(jf_ep["Path"].replace("\\","/")).split(".")[0]
             episode_handler = Episode(youtube_id, jf_ep["Id"])
             ta_video: TAVideo = episode_handler.get_ta_video()
             season_folder: str | None = self.create_season(ta_video, jf_ep)
