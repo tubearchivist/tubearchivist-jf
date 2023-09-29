@@ -192,7 +192,10 @@ class Show:
             os.path.split(jf_ep["Path"].replace("\\", "/"))[0]
         )[-1]
         season_folder = os.path.join(base, channel_folder, expected_season)
-        os.makedirs(season_folder)
+        try:
+            os.makedirs(season_folder)
+        except FileExistsError:
+            pass
         self._wait_for_season(expected_season)
 
         return season_folder
@@ -219,7 +222,7 @@ class Show:
         path: str = f"Shows/{series_id}/Seasons"
         all_seasons: dict = Jellyfin().get(path)
 
-        return [str(i.get("IndexNumber")) for i in all_seasons["Items"]]
+        return [str(i.get("Name")) for i in all_seasons["Items"]]
 
     def delete_folders(self, folders: list[str]) -> None:
         """delete temporary folders created"""
