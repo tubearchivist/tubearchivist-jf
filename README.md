@@ -92,6 +92,8 @@ python app/main.py
 ```
 
 ## Limitations
+You can only have *one* folder called **YouTube** in your Jellyfin.
+
 Jellyfin needs to be able to see the temporary season folders created by this extensions. You will see messages like `waiting for seasons to be created` before you will run into a `TimeoutError`, if that doesn't happen in a reasonable time frame.
 
 Some ideas for why that is:
