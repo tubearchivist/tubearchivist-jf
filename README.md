@@ -1,6 +1,4 @@
 ## Tube Archivist Jellyfin Integration
-*Note: This repo was renamed from **tubearchivist/jellyfin** to **tubearchivist/tubearchivist-jf** to avoid confustion with the main Jellyfin repo.*  
-
 Import your Tube Archivist media folder into Jellyfin
 
 ![home screenshot](assets/screenshot-home.png?raw=true "Jellyfin Home")
@@ -66,7 +64,7 @@ docker exec -it tubearchivist-jf python main.py
 ```
 
 ### Auto trigger
-Use the notification functionality of Tube Archivist to automatically trigger a library scan whenever the download task complets in Tube Archivist. For the `Start download` schedule on your settings page add a json Apprise link to send a push notification to the `tubearchivist-jf` container on task completion, make sure to specify the port, e.g.:
+Use the notification functionality of Tube Archivist to automatically trigger a library scan whenever the download task completes in Tube Archivist. For the `Start download` schedule on your settings page add a json Apprise link to send a push notification to the `tubearchivist-jf` container on task completion, make sure to specify the port, e.g.:
 
 ```
 json://tubearchivist-jf:8001
