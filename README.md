@@ -99,8 +99,6 @@ Some ideas for why that is:
 - JF doesn't have the permissions to see the folder created by the extension.
 - You didn't mount the volumes as expected and JF is looking in the wrong place.
 
-You might have to cleanup any leftover year folders in the channel if you have reached a `TimeoutError` before you can run it again.
-
 ## Migration problems
 Due to the filesystem change between Tube Archivist v0.3.6 to v0.4.0, this will reset your YouTube videos in Jellyfin and will add them as new again. Unfortunately there is no migration path.
 

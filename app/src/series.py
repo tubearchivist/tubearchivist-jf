@@ -192,7 +192,13 @@ class Show:
             os.path.split(jf_ep["Path"].replace("\\", "/"))[0]
         )[-1]
         season_folder = os.path.join(base, channel_folder, expected_season)
-        os.makedirs(season_folder)
+        if not os.path.exists(season_folder):
+            original_umask = os.umask(0)
+            try:
+                os.mkdir(season_folder, mode=0o777)
+            finally:
+                os.umask(original_umask)
+
         self._wait_for_season(expected_season)
 
         return season_folder
