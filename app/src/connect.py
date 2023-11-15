@@ -9,7 +9,7 @@ from src.static_types import ConfigType, TAChannel, TAVideo
 
 CONFIG: ConfigType = get_config()
 TIMEOUT = 60
-EXPECTED_ENV = {"ta_url", "ta_token", "jf_url", "jf_token", "ta_video_path"}
+EXPECTED_ENV = {"ta_url", "ta_token", "jf_url", "jf_token", "ta_video_path"} # js_folder is optional
 
 
 class Jellyfin:

@@ -22,8 +22,15 @@ class Library:
         """get collection id for youtube folder"""
         path: str = "Items?Recursive=true&includeItemTypes=Folder"
         folders: dict = Jellyfin().get(path)
+        folder_name: str | None = get_config()["jf_folder"]
+
+        if not folder_name or len(folder_name) < 1:
+            folder_name = "youtube"
+        else:
+            folder_name = folder_name.lower()
+
         for folder in folders["Items"]:
-            if folder.get("Name").lower() == "youtube":
+            if folder.get("Name").lower() == folder_name:
                 return folder.get("Id")
 
         raise ValueError("youtube folder not found")

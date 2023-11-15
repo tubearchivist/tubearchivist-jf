@@ -38,6 +38,7 @@ def get_config_env() -> ConfigType | Literal[False]:
             "ta_token": os.environ["TA_TOKEN"],
             "jf_url": os.environ["JF_URL"],
             "jf_token": os.environ["JF_TOKEN"],
+            "jf_folder": os.environ['JF_FOLDER']
         }
         return config_content
 

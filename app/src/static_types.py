@@ -11,6 +11,7 @@ class ConfigType(TypedDict):
     ta_token: str
     jf_url: str
     jf_token: str
+    jf_folder: str | None
 
 
 class TAChannel(TypedDict):
