@@ -84,7 +84,7 @@ class Library:
                     return
 
                 print("waiting for library refresh")
-                sleep(5)
+                sleep(10)
 
 
 class Show:

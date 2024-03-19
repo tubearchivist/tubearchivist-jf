@@ -15,7 +15,8 @@ EXPECTED_ENV = {
     "jf_url",
     "jf_token",
     "ta_video_path",
-}  # jf_folder is optional
+    "jf_folder",
+}
 
 
 class Jellyfin:
