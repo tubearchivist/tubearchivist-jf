@@ -74,7 +74,7 @@ class Library:
         path: str = f"Items/{collection_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
         Jellyfin().post(path, False)
 
-        for _ in range(12):
+        for _ in range(24):
             response = Jellyfin().get("Library/VirtualFolders")
             for folder in response:
                 if not folder["ItemId"] == collection_id:
