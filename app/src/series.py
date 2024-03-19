@@ -210,8 +210,10 @@ class Show:
         jf_id: str = self.show["Id"]
         path: str = f"Items/{jf_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
         Jellyfin().post(path, False)
-        for _ in range(12):
+        for _ in range(100):
             all_existing: set[str] = set(self._get_existing_seasons())
+
+            print(f"[setup] seasons: {all_existing}")
 
             if expected_season in all_existing:
                 return
