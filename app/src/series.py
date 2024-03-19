@@ -230,6 +230,8 @@ class Show:
         path: str = f"Shows/{series_id}/Seasons"
         all_seasons: dict = Jellyfin().get(path)
 
+        print(f"[setup] {path=} all_seasons_items={all_seasons['Items']}")
+
         return [str(i.get("IndexNumber")) for i in all_seasons["Items"]]
 
     def delete_folders(self, folders: list[str]) -> None:
