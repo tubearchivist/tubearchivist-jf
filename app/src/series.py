@@ -209,11 +209,12 @@ class Show:
         """wait for season to be created in JF"""
         jf_id: str = self.show["Id"]
         path: str = f"Items/{jf_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
+        print(f"[setup] {path=}")
         Jellyfin().post(path, False)
         for _ in range(100):
             all_existing: set[str] = set(self._get_existing_seasons())
 
-            print(f"[setup] seasons: {all_existing}")
+            print(f"[setup] seasons: {all_existing} {expected_season=}")
 
             if expected_season in all_existing:
                 return
