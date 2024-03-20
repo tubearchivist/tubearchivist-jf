@@ -3,5 +3,6 @@
     "ta_url": "http://tubearchivist.local",
     "ta_token": "xxxxxxxxxxxxxxxx",
     "jf_url": "http://jellyfin.local:8096",
-    "jf_token": "yyyyyyyyyyyyyyyy"
+    "jf_token": "yyyyyyyyyyyyyyyy",
+    "jf_folder": "YouTube"
 }

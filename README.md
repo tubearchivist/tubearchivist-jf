@@ -53,6 +53,7 @@ An example configuration is provided in the docker-compose.yml file. Configure t
   - `TA_TOKEN`: Tube Archivist API token, accessible from the settings page
   - `JF_URL`: Full URL where Jellyfin is reachable
   - `JF_TOKEN`: Jellyfin API token
+  - `JF_FOLDER`: Folder override if your folder is not named "YouTube" on your Filesystem.
   - `LISTEN_PORT`: Optionally change the port where the integration is listening for messages. Defaults to `8001`. If you change this, make sure to also change the json link for auto trigger as described below.
 
 Mount the `/youtube` folder from Tube Archivist also in this container at `/youtube` to give this integration access to the media archive.
@@ -83,6 +84,7 @@ pip install requests
 	- `ta_token`: Tube Archivist API token, accessible from the settings page
 	- `jf_url`: Full URL where Jellyfin is reachable
 	- `jf_token`: Jellyfin API token
+    - `jf_folder`: Name of the folder where TubeArchivist puts the files into
 
 Then run the script from the main folder with python, e.g.
 ```python

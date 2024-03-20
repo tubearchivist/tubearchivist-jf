@@ -22,8 +22,10 @@ class Library:
         """get collection id for youtube folder"""
         path: str = "Items?Recursive=true&includeItemTypes=Folder"
         folders: dict = Jellyfin().get(path)
+        folder_name: str = get_config()["jf_folder"]
+
         for folder in folders["Items"]:
-            if folder.get("Name").lower() == "youtube":
+            if folder.get("Name").lower() == folder_name.lower():
                 return folder.get("Id")
 
         raise ValueError("youtube folder not found")
@@ -72,7 +74,7 @@ class Library:
         path: str = f"Items/{collection_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
         Jellyfin().post(path, False)
 
-        for _ in range(12):
+        while True:
             response = Jellyfin().get("Library/VirtualFolders")
             for folder in response:
                 if not folder["ItemId"] == collection_id:
@@ -82,7 +84,7 @@ class Library:
                     return
 
                 print("waiting for library refresh")
-                sleep(5)
+                sleep(10)
 
 
 class Show:
@@ -207,9 +209,12 @@ class Show:
         """wait for season to be created in JF"""
         jf_id: str = self.show["Id"]
         path: str = f"Items/{jf_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
+        print(f"[setup] {path=}")
         Jellyfin().post(path, False)
-        for _ in range(12):
+        while True:
             all_existing: set[str] = set(self._get_existing_seasons())
+
+            print(f"[setup] seasons: {all_existing} {expected_season=}")
 
             if expected_season in all_existing:
                 return
@@ -225,7 +230,13 @@ class Show:
         path: str = f"Shows/{series_id}/Seasons"
         all_seasons: dict = Jellyfin().get(path)
 
+        # print(f"[setup] {path=} all_seasons_items={all_seasons['Items']}")
+
         return [str(i.get("IndexNumber")) for i in all_seasons["Items"]]
+
+        # res = [str(i.get("Name")) for i in all_seasons["Items"]]
+
+        # return [name.split(' ')[1] if ' ' in name else name for name in res]
 
     def delete_folders(self, folders: list[str]) -> None:
         """delete temporary folders created"""
