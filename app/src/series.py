@@ -74,7 +74,7 @@ class Library:
         path: str = f"Items/{collection_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
         Jellyfin().post(path, False)
 
-        for _ in range(24):
+        while True:
             response = Jellyfin().get("Library/VirtualFolders")
             for folder in response:
                 if not folder["ItemId"] == collection_id:
@@ -211,7 +211,7 @@ class Show:
         path: str = f"Items/{jf_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
         print(f"[setup] {path=}")
         Jellyfin().post(path, False)
-        for _ in range(100):
+        while True:
             all_existing: set[str] = set(self._get_existing_seasons())
 
             print(f"[setup] seasons: {all_existing} {expected_season=}")
