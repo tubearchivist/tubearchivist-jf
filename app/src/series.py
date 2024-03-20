@@ -232,9 +232,11 @@ class Show:
 
         # print(f"[setup] {path=} all_seasons_items={all_seasons['Items']}")
 
-        res = [str(i.get("Name")) for i in all_seasons["Items"]]
+        return [str(i.get("IndexNumber")) for i in all_seasons["Items"]]
 
-        return [name.split(' ')[1] if ' ' in name else name for name in res]
+        # res = [str(i.get("Name")) for i in all_seasons["Items"]]
+
+        # return [name.split(' ')[1] if ' ' in name else name for name in res]
 
     def delete_folders(self, folders: list[str]) -> None:
         """delete temporary folders created"""
