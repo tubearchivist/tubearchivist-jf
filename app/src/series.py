@@ -230,7 +230,7 @@ class Show:
         path: str = f"Shows/{series_id}/Seasons"
         all_seasons: dict = Jellyfin().get(path)
 
-        print(f"[setup] {path=} all_seasons_items={all_seasons['Items']}")
+        # print(f"[setup] {path=} all_seasons_items={all_seasons['Items']}")
 
         res = [str(i.get("Name")) for i in all_seasons["Items"]]
 
