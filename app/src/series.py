@@ -217,7 +217,7 @@ class Show:
         )
         print(f"[setup] {path=}")
         Jellyfin().post(path, False)
-        while True:
+        for _ in range(24):
             all_existing: set[str] = set(self._get_existing_seasons())
 
             print(f"[setup] seasons: {all_existing} {expected_season=}")
