@@ -22,8 +22,10 @@ class Library:
         """get collection id for youtube folder"""
         path: str = "Items?Recursive=true&includeItemTypes=Folder"
         folders: dict = Jellyfin().get(path)
+        folder_name: str = get_config()["jf_folder"]
+
         for folder in folders["Items"]:
-            if folder.get("Name").lower() == "youtube":
+            if folder.get("Name").lower() == folder_name.lower():
                 return folder.get("Id")
 
         raise ValueError("youtube folder not found")
@@ -76,7 +78,7 @@ class Library:
         )
         Jellyfin().post(path, False)
 
-        for _ in range(12):
+        while True:
             response = Jellyfin().get("Library/VirtualFolders")
             for folder in response:
                 if not folder["ItemId"] == collection_id:
@@ -86,7 +88,7 @@ class Library:
                     return
 
                 print("waiting for library refresh")
-                sleep(5)
+                sleep(10)
 
 
 class Show:
@@ -213,9 +215,12 @@ class Show:
         path: str = (
             f"Items/{jf_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
         )
+        print(f"[setup] {path=}")
         Jellyfin().post(path, False)
-        for _ in range(12):
+        for _ in range(24):
             all_existing: set[str] = set(self._get_existing_seasons())
+
+            print(f"[setup] seasons: {all_existing} {expected_season=}")
 
             if expected_season in all_existing:
                 return
