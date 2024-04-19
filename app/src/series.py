@@ -47,7 +47,9 @@ class Library:
 
     def _get_all_series(self) -> dict:
         """get all shows indexed in jf"""
-        path: str = f"Items?Recursive=true&IncludeItemTypes=Series&fields=ParentId,Path&ParentId={self.yt_collection}"  # noqa: E501
+        path: str = (
+            f"Items?Recursive=true&IncludeItemTypes=Series&fields=ParentId,Path&ParentId={self.yt_collection}"  # noqa: E501
+        )
         all_shows: dict = Jellyfin().get(path)
 
         return all_shows
@@ -71,7 +73,9 @@ class Library:
 
     def refresh_collection(self, collection_id: str) -> None:
         """trigger collection refresh"""
-        path: str = f"Items/{collection_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
+        path: str = (
+            f"Items/{collection_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
+        )
         Jellyfin().post(path, False)
 
         while True:
@@ -208,7 +212,9 @@ class Show:
     def _wait_for_season(self, expected_season: str) -> None:
         """wait for season to be created in JF"""
         jf_id: str = self.show["Id"]
-        path: str = f"Items/{jf_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
+        path: str = (
+            f"Items/{jf_id}/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default"  # noqa: E501
+        )
         print(f"[setup] {path=}")
         Jellyfin().post(path, False)
         while True:

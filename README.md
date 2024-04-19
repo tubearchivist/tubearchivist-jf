@@ -61,7 +61,7 @@ Mount the `/youtube` folder from Tube Archivist also in this container at `/yout
 ### Manual trigger
 For an initial import or for other irregular occasions, trigger the library scan from outside the container, e.g.:
 ```bash
-docker exec -it tubearchivist-jf python main.py
+docker exec tubearchivist-jf python main.py
 ```
 
 ### Auto trigger
