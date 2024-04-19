@@ -9,8 +9,8 @@ The new plugin offers better features, as well as a more futureproof codebase.
 - [tubearchivist-jf ](https://github.com/tubearchivist/tubearchivist-jf) will be set to read-only on **July 20th, 2024**.
 
 ***What Does This Mean for You?***
-- We strongly suggest *not* installing this repo as it will stop recieving updates.
-- Transition to the new repo at your earliest convience.
+- We strongly suggest *not* installing this repo as it will stop receiving updates.
+- Transition to the new repo at your earliest convenience.
 
 ## Tube Archivist Jellyfin Integration
 Import your Tube Archivist media folder into Jellyfin
