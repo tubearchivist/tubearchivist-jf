@@ -7,12 +7,12 @@ ENV PATH=/root/.local/bin:$PATH
 RUN if [ "$INSTALL_DEBUG" ] ; then \
         apt-get -y update && apt-get -y install --no-install-recommends \
         vim htop bmon net-tools iputils-ping procps curl \
-        && pip install --user ipython \
+        && pip install ipython \
     ; fi
 
 # install requirements
 COPY ./requirements.txt /requirements.txt
-RUN pip install --user -r requirements.txt
+RUN pip install -r requirements.txt
 
 COPY app /app
 WORKDIR app
