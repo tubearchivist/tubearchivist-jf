@@ -1,4 +1,4 @@
-FROM python:3.11.3-slim-bullseye
+FROM python:3.11.8-slim-bookworm
 ARG INSTALL_DEBUG
 ENV PYTHONUNBUFFERED 1
 ENV PATH=/root/.local/bin:$PATH
