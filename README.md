@@ -1,16 +1,6 @@
-## 📢 Important Announcement: Repository Deprecation and Migration
-We want to inform you that we are deprecating this repository,
-[tubearchivist-jf ](https://github.com/tubearchivist/tubearchivist-jf), and moving to an updated repo, [tubearchivist-jf-plugin](https://github.com/tubearchivist/tubearchivist-jf-plugin).
-This decision comes as part of our efforts to streamline our development process and provide a better experience for our users.
+## Archived
 
-The new plugin offers better features, as well as a more futureproof codebase.
-
-***Key Dates:***
-- [tubearchivist-jf ](https://github.com/tubearchivist/tubearchivist-jf) will be set to read-only on **July 20th, 2024**.
-
-***What Does This Mean for You?***
-- We strongly suggest *not* installing this repo as it will stop receiving updates.
-- Transition to the new repo at your earliest convenience.
+This integration is archived. Use the [tubearchivist-jf-plugin](https://github.com/tubearchivist/tubearchivist-jf-plugin) instead for a Tube Archivist - Jellyfi integration.
 
 ## Tube Archivist Jellyfin Integration
 Import your Tube Archivist media folder into Jellyfin
